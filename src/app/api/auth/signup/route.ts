@@ -38,10 +38,9 @@ export async function POST(request: NextRequest) {
       prisma.person.create({
         data: {
           id_no: email,
-          first_name: firstName,
-          last_name: lastName,
-          level: '',
-          title: '',
+          person_thai_thai_firstname: firstName,
+          person_thai_thai_lastname: lastName,
+          person_level: '',
           costCtr: costCtr,
           em_stat: "2"
         },

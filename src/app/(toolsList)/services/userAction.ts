@@ -82,6 +82,11 @@ export type toolslist = {
   name: string;
 }
 
+export type UserOptions = {
+  groupTools?: toolslist[];
+  [key: string]: unknown;
+};
+
 export async function addGroupToolsTOuser(id: number) {
   const session = await getServerSession(options);
   if (!session) {
@@ -108,9 +113,9 @@ export async function addGroupToolsTOuser(id: number) {
     return { status: 404, message: "User not found" };
   }
 
-  // อ่าน options เดิม
-  const existingOptions = user.options ?? {}; // ถ้าไม่มี options ตั้งเป็น {} เปล่า
-  // const existingOptions = user.options as { groupTools?: toolslist[] };
+
+
+  const existingOptions = (user.options as UserOptions | null) ?? {};
   const existingGroupTools = Array.isArray(existingOptions.groupTools)
     ? existingOptions.groupTools
     : [];
@@ -180,7 +185,8 @@ export async function removeGroupToolsFromUser(id: number) {
   }
 
   // const existingOptions = user.options ?? {};
-  const existingOptions = user.options as { groupTools?: toolslist[] };
+  // const existingOptions = user.options as { groupTools?: toolslist[] };
+  const existingOptions = (user.options as UserOptions | null) ?? {};
   const existingGroupTools = Array.isArray(existingOptions.groupTools)
     ? existingOptions.groupTools
     : [];
