@@ -1,4 +1,6 @@
 import React from 'react'
+
+export const dynamic = 'force-dynamic';
 import prisma from "@/lib/db";
 import TableCostCtr from '../components/TableCostCtr';
 import { CostCtr } from '@prisma/client';
