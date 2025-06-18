@@ -21,7 +21,7 @@ COPY prisma ./prisma
 COPY src ./src
 COPY public ./public
 COPY types ./types
-COPY next.config.js .
+COPY next.config.ts .
 COPY tsconfig.json .
 
 

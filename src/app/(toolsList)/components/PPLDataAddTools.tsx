@@ -1,31 +1,28 @@
 import {
-  ActionIcon,
+
   Box,
   Button,
   Fieldset,
-  Flex,
+
   Grid,
   Group,
-  Select,
-  Switch,
-  Textarea,
-  TextInput,
+
 } from "@mantine/core";
-import { notifications } from "@mantine/notifications";
-import React, { useEffect, useState } from "react";
+
+import React, {useState } from "react";
 import "dayjs/locale/th";
 
-import { fetcher, http } from "@/services/http-service";
-import useSWR from "swr";
-import { useTimeline } from "../hook/useTimeline";
-import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
-import { pplEx, selectItem } from "../types/types";
+import {  http } from "@/services/http-service";
+// import useSWR from "swr";
+// import { useTimeline } from "../hook/useTimeline";
+
+// import { pplEx, selectItem } from "../types/types";
 
 import { DateInput } from "@mantine/dates";
 
-import { useSession } from 'next-auth/react';
-import { WorkType } from "@prisma/client";
-import { useGetWorkType } from "../hook/getWorkType";
+// import { useSession } from 'next-auth/react';
+// import { WorkType } from "@prisma/client";
+// import { useGetWorkType } from "../hook/getWorkType";
 
 type Props = {
   CostCtr: string;
@@ -34,61 +31,61 @@ type Props = {
   close: () => void;
 };
 function PPLDataAddTools(Props: Props) {
-  const [inPlan, setInPlan] = useState(true);
-  const [name, setName] = useState("");
-  const [note, setNote] = useState<string>("");
-  const [location, setLocation] = useState<string>("");
-  const [type, setType] = useState<string | null>("");
-  const [workTypeData, setWorkTypeData] = useState<selectItem[]>([]);
+  // const [inPlan, setInPlan] = useState(true);
+  // const [name, setName] = useState("");
+  // const [note, setNote] = useState<string>("");
+  // const [location, setLocation] = useState<string>("");
+  // const [type, setType] = useState<string | null>("");
+  // const [workTypeData, setWorkTypeData] = useState<selectItem[]>([]);
 
-  const [pplData, setPplData] = useState<selectItem[]>([]);
-  const [ppl, setPpl] = useState<string | null>(null);
+  // const [pplData, setPplData] = useState<selectItem[]>([]);
+  // const [ppl, setPpl] = useState<string | null>(null);
   const [D01, setD01] = useState<string | null>(null);
   const [D02, setD02] = useState<string | null>(null);
 
-  const [id_no, setId_no] = useState<string | null>(null);
+  // const [id_no, setId_no] = useState<string | null>(null);
 
-  const { data: session } = useSession();
+  // const { data: session } = useSession();
 
-  useEffect(() => {
-    if (session) {if(session.user.email){setId_no(session.user.email)}}
-  }, [session]);
+  // useEffect(() => {
+  //   if (session) {if(session.user.email){setId_no(session.user.email)}}
+  // }, [session]);
 
-  const { selectedMonth, selectedYear, setSelectedMonth, setSelectedYear } = useTimeline();
-  const { workType, workTypeLoading } = useGetWorkType();
+  // const { selectedMonth, selectedYear, setSelectedMonth, setSelectedYear } = useTimeline();
+  // const { workType } = useGetWorkType();
 
-  useEffect(() => {
-    if (workType) {
-      const rows = workType.map((element: WorkType) => ({
-        value: String(element.id),
-        label: "(" + element.Code + ") " + element.name,
-      }));
-      setWorkTypeData(rows);
-    }
-  }, [workType]);
+  // useEffect(() => {
+  //   if (workType) {
+  //     const rows = workType.map((element: WorkType) => ({
+  //       value: String(element.id),
+  //       label: "(" + element.Code + ") " + element.name,
+  //     }));
+  //     setWorkTypeData(rows);
+  //   }
+  // }, [workType]);
 
-  const { data, isLoading, } = useSWR(
-    `emdtools_v1/getPPLData?CostCtr=${Props.CostCtr}&month=${
-      selectedMonth + 1
-    }&year=${selectedYear}&SapCode=${Props.SapCode}`,
-    fetcher
-  );
+  // const { data, isLoading, } = useSWR(
+  //   `emdtools_v1/getPPLData?CostCtr=${Props.CostCtr}&month=${
+  //     selectedMonth + 1
+  //   }&year=${selectedYear}&SapCode=${Props.SapCode}`,
+  //   fetcher
+  // );
 
-  useEffect(() => {
-    if (data) {
-      const rows = data.data.map((element: pplEx) => ({
-        value: String(element.id),
-        label:
-          "(" +
-          element.TYP +
-          ") " +
-          element.Workname +
-          " " +
-          element.pplink.name,
-      }));
-      setPplData(rows);
-    }
-  }, [data]);
+  // useEffect(() => {
+  //   if (data) {
+  //     const rows = data.data.map((element: pplEx) => ({
+  //       value: String(element.id),
+  //       label:
+  //         "(" +
+  //         element.TYP +
+  //         ") " +
+  //         element.Workname +
+  //         " " +
+  //         element.pplink.name,
+  //     }));
+  //     setPplData(rows);
+  //   }
+  // }, [data]);
 
   
 

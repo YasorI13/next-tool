@@ -3,7 +3,12 @@
 import Image from "next/image";
 import { useRef } from "react";
 import useSWR from "swr";
-import { listToolImages, uploadToolImage, deleteToolImage } from "../services/toolImages";
+import {
+  listToolImages,
+  uploadToolImage,
+  deleteToolImage,
+} from "../services/toolImages";
+import { Box, Fieldset } from "@mantine/core";
 
 type Props = { asset: string };
 
@@ -29,23 +34,32 @@ export default function ToolsImageManager({ asset }: Props) {
   };
 
   return (
-    <div>
-      <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
-        {images.map((name: string) => (
-          <div key={name}>
-            <Image src={`/tool-images/${name}`} alt={name} width={150} height={150} />
-            <button onClick={() => handleDelete(name)}>Delete</button>
+    <>
+      <Box>
+        <Fieldset radius="lg" variant="filled" mt={12}>
+          <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
+            {images.map((name: string) => (
+              <div key={name}>
+                <Image
+                  src={`/tool-images/${name}`}
+                  alt={name}
+                  width={150}
+                  height={150}
+                />
+                <button onClick={() => handleDelete(name)}>Delete</button>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-      {images.length < 3 && (
-        <input
-          type="file"
-          accept="image/*"
-          ref={inputRef}
-          onChange={handleUpload}
-        />
-      )}
-    </div>
+          {images.length < 3 && (
+            <input
+              type="file"
+              accept="image/*"
+              ref={inputRef}
+              onChange={handleUpload}
+            />
+          )}
+        </Fieldset>
+      </Box>
+    </>
   );
 }

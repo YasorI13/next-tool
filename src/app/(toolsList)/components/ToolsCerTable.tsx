@@ -40,8 +40,10 @@ function ToolsCerTable({ CostCtr }: Props) {
   const [supClass, setSupClass] = useState<string[]>([]);
   const [groubList, setGroubList] = useState<GroubList[]>();
   const [toolsType, setToolsType] = useState("0");
-  const [opened, { open, close }] = useDisclosure(false);
+  const [opened, {  close }] = useDisclosure(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [id, setId] = useState<string>("");
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [step, setStep] = useState(0);
   const router = useRouter();
   const {
@@ -91,6 +93,7 @@ function ToolsCerTable({ CostCtr }: Props) {
     fetcher
   );
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [groubList2, setGroubList2] = useState<selectItem[]>();
 
   useEffect(() => {

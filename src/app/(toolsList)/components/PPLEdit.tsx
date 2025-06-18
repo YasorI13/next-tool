@@ -27,7 +27,7 @@ function PPLEdit({id, close, PPLMutate}: Props) {
   );
     const [name, setName] = useState("");
     const [namePlant, setNamePlant] = useState("");
-    const [note, setNote] = useState<string>("");
+    // const [note, setNote] = useState<string>("");
     const [D01, setD01] = useState<string | null>(null);
     const [D02, setD02] = useState<string | null>(null);
 
@@ -36,7 +36,7 @@ function PPLEdit({id, close, PPLMutate}: Props) {
   useEffect(() => {
     if (PPLData) {
       setName(PPLData.Workname);
-      setNote(String(PPLData.comment));
+      // setNote(String(PPLData.comment));
       setNamePlant(PPLData.pplink.name);
       if(PPLData.color){setColor(PPLData.color)}
       if(PPLData.D01 && PPLData.D02){ 
