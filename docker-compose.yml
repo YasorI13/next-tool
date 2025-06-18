@@ -1,0 +1,36 @@
+# version: '3.8'
+services:
+  emdTools-db:
+    container_name: emdTools-db
+    image: mysql:8.4.2
+    restart: always
+    # command: --default-authentication-plugin=mysql_native_password
+    environment:
+      TZ: "Asia/Bangkok"
+      MYSQL_ROOT_PASSWORD: MYSQL_ROOT_PASSWORD
+      MYSQL_DATABASE: emdtools
+      MYSQL_USER: MYSQL_USER
+      MYSQL_PASSWORD: MYSQL_PASSWORD
+    ports:
+      - 3306:3306
+    volumes:
+      - ./mysql/src:/var/lib/mysql
+    networks:
+      - emd_network
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - "3001:80"
+    restart: always
+    environment:
+      TZ: "Asia/Bangkok"
+      PMA_HOST: emdTools-db
+    depends_on:
+      - emdTools-db
+    networks:
+      - emd_network
+      
+networks:
+  emd_network:
+    driver: bridge

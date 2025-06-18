@@ -1,0 +1,278 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model LoginLog {
+  id    Int      @id @default(autoincrement())
+  date  DateTime @default(now()) @db.DateTime(0)
+  email String?  @db.VarChar(150)
+}
+
+model ToolsData {
+  asset              String    @unique @db.VarChar(150)
+  sNo                String    @db.VarChar(50)
+  capDate            String    @db.VarChar(50)
+  assetDescription   String    @db.VarChar(150)
+  acquisVal          Decimal   @db.Decimal(10, 2)
+  supClass           SupClass  @relation(name: "supClassRelation", fields: [supClassId], references: [AsstSupNo])
+  supClassId         String
+  rspCCtr            CostCtr   @relation(name: "rspCCtrRelation", fields: [rspCCtrId], references: [CostCtr])
+  rspCCtrId          String
+  costCtr            CostCtr   @relation(name: "costCtrRelation", fields: [costCtrId], references: [CostCtr])
+  costCtrId          String
+  phyLoc             String    @db.VarChar(50)
+  typeName           String    @db.VarChar(150)
+  licensePlate       String    @db.VarChar(50)
+  manufactureOfAsset String    @db.VarChar(50)
+  serialNo           String    @db.VarChar(50)
+  ba                 String    @db.VarChar(50)
+  inventoryNumber    String    @db.VarChar(50)
+  // persNo             String    @db.VarChar(50)
+  useType            String    @db.VarChar(50)
+  toolsStatus        String    @default("Active") @db.VarChar(50) // ใช้สำหรับแบ่งแยกสถานะการยืม
+  available          Boolean   @default(true)
+  hasCer             Boolean   @default(false)
+  CerDate            DateTime? @db.Date
+  options            Json?
+  person             person?   @relation(name: "personRelation", fields: [personNo], references: [id_no])
+  personNo           String?   @db.Char(8)
+
+  assetCustomList assetCustomListOnToolsData[]
+  borrowItem      BorrowItem[]
+  toolsplan       toolsplan[] 
+}
+
+model SupClass {
+  AsstSupNo    String @unique @db.VarChar(30)
+  SupClassName String @db.VarChar(150)
+  options      Json?
+
+  toolsData ToolsData[] @relation(name: "supClassRelation")
+}
+
+model CostCtr {
+  CostCtr     String  @unique @db.VarChar(50)
+  Description String  @db.VarChar(150)
+  ShortText   String  @db.VarChar(50)
+  Cwk_        String? @db.VarChar(50)
+  options     Json?
+
+  ppl        ppl[]             @relation(name: "pplCtrRelation")
+  toolsData  ToolsData[]       @relation(name: "costCtrRelation")
+  rspCCtr    ToolsData[]       @relation(name: "rspCCtrRelation")
+  CostCtrs   assetCustomList[] @relation(name: "CustomListRelation")
+  borrowForm BorrowForm[]
+  person     person[]
+}
+
+model assetCustomList {
+  assetCustomListId Int     @id @default(autoincrement())
+  name              String
+  description       String
+  options           Json?
+  costCtrs          CostCtr @relation(name: "CustomListRelation", fields: [CostCtr], references: [CostCtr])
+  CostCtr           String
+
+  assetCustomList assetCustomListOnToolsData[]
+}
+
+model assetCustomListOnToolsData {
+  assetCustomListId Int
+  asset             String
+
+  ToolsData       ToolsData       @relation(fields: [asset], references: [asset])
+  assetCustomList assetCustomList @relation(fields: [assetCustomListId], references: [assetCustomListId])
+
+  @@unique([assetCustomListId, asset])
+  @@index([assetCustomListId], map: "assetCustomListOnToolsData_assetCustomListId__fkey")
+  @@index([asset], map: "assetCustomListOnToolsData_asset__fkey")
+}
+
+model ppl {
+  id        Int      @id
+  D01       DateTime @db.Date
+  D02       DateTime @db.Date
+  Workname  String   @db.VarChar(150)
+  Year      String   @db.VarChar(4)
+  TYP       String   @db.VarChar(20)
+  carNumber String?
+  color     String?
+  comment   String?  @db.VarChar(1000)
+
+  costCtr CostCtr @relation(name: "pplCtrRelation", fields: [CostCtr], references: [CostCtr])
+  CostCtr String  @db.VarChar(50)
+
+  pplink   pplink @relation(fields: [pplinkId], references: [id])
+  pplinkId Int
+
+  toolsplan toolsplan[] 
+  borrowForm BorrowForm[]
+}
+
+model toolsplan {
+  id        Int       @id @default(autoincrement())
+  D01       DateTime  @db.Date
+  D02       DateTime  @db.Date
+
+  ToolsData ToolsData @relation(fields: [asset], references: [asset],onDelete: Cascade)
+  asset     String
+
+  ppl          ppl?   @relation(fields: [ppl_id], references: [id] , onDelete: Cascade)
+  ppl_id       Int?
+  comment   String?
+}
+
+model pplink {
+  id      Int    @id @default(autoincrement())
+  name    String @db.VarChar(150)
+  SapCode String @unique @db.VarChar(40)
+  MMSCode String @db.VarChar(40)
+  power   Int?
+  P_type  String @db.VarChar(20)
+  In_type String @db.VarChar(20)
+  options Json?
+
+  ppls ppl[]
+}
+
+model workCostNumber {
+  id          Int    @id @default(autoincrement())
+  CostNumber  String @db.VarChar(40)
+  description String
+}
+
+
+model person {
+  id                          Int       @id @default(autoincrement())
+  id_no                       String    @unique @db.Char(8)
+  person_thai_prefix_name     String?
+  person_thai_thai_firstname  String
+  person_thai_thai_lastname   String
+  person_eng_name             String?
+  person_type                 String?
+  person_level                String?
+  person_mail_address         String?
+  person_gender               String?
+  person_employment_date      DateTime? @db.Date
+  person_admission_date       DateTime? @db.Date
+  person_retirement_date      DateTime? @db.Date
+  person_position             String?
+  position_key_without_level  String?
+  person_position_period_year Int?
+  person_level_period_year    Int?
+  person_is_boss_main_org     Boolean   @default(false)
+  main_org_code               String?
+  role                        String?   @db.VarChar(20)
+  em_stat                     String    @default("1") @db.VarChar(2) // 1 พนักงาน 2 สมาชิก 
+  options                     Json?
+
+  CostCtr CostCtr @relation(fields: [costCtr], references: [CostCtr])
+  costCtr String
+
+  borrowForm    BorrowForm[]
+  toolsData     ToolsData[]  @relation("personRelation")
+  approvePerson BorrowItem[] @relation("approvePersonRelation")
+  returnPerson  BorrowItem[] @relation("returnPersonRelation")
+}
+
+model Member {
+  id        Int      @id @default(autoincrement())
+  firstName String
+  lastName  String
+  email     String   @unique @db.Char(6)
+  password  String
+  role      String?  @db.VarChar(20)
+  message   String?
+  createdAt DateTime @default(now()) @db.DateTime(0)
+  status    Boolean  @default(true)
+  options   Json?
+}
+
+model cmdLog {
+  id    Int      @id @default(autoincrement())
+  date  DateTime @default(now()) @db.DateTime(0)
+  email String?  @db.VarChar(150)
+  cmd   String   @db.VarChar(255)
+}
+
+model BorrowForm {
+  id           Int              @id @default(autoincrement())
+  D01          DateTime         @db.Date
+  D02          DateTime         @db.Date
+  inPlan       Boolean          @default(true)
+  name         String?          @db.VarChar(150)
+  location     String?          @db.VarChar(150)
+  CreateDate   DateTime         @default(now()) @db.DateTime(0)
+  sendDate     DateTime?
+  approveDate  DateTime?
+  sendreturnDate  DateTime?
+  returnDate   DateTime?
+  note         String?
+  mmyyyy       String?          @db.VarChar(6)
+  options      Json?
+  person       person           @relation(fields: [id_no], references: [id_no])
+  id_no        String           @db.Char(30)
+  borrowItems  BorrowItem[]
+  ppl          ppl?             @relation(fields: [ppl_id], references: [id] , onDelete: Cascade)
+  ppl_id       Int?
+  CostCtr      CostCtr          @relation(fields: [costCtr], references: [CostCtr])
+  costCtr      String
+  WorkType     WorkType         @relation(fields: [workTypeId], references: [id])
+  workTypeId   Int
+  FormStatus   BorrowFormStatus @relation(fields: [FormStatusId], references: [id] )
+  FormStatusId Int              @default(1)
+}
+
+model BorrowItem {
+  id            Int          @id @default(autoincrement())
+  status        BorrowStatus @default(prepar)
+  note          String?
+  tool          ToolsData    @relation(fields: [asset], references: [asset])
+  asset         String
+  borrowForm    BorrowForm   @relation(fields: [borrowFormId], references: [id] ,onDelete: Cascade )
+  borrowFormId  Int
+  approvePerson person?      @relation(name: "approvePersonRelation", fields: [approveBy], references: [id_no])
+  approveBy     String?      @db.Char(8)
+  approveDate   DateTime?
+  returnPerson  person?      @relation(name: "returnPersonRelation", fields: [returnBy], references: [id_no])
+  returnBy      String?      @db.Char(8)
+  returnDate    DateTime?
+}
+
+enum BorrowStatus {
+  prepar // เอาของไว้ในใบยืม
+  sending // กําลังส่งเพื่อขออนุมัติ
+  approve 
+  sendreturn 
+  pending
+  return // คืนแล้ว
+}
+
+model WorkType {
+  id   Int    @id @default(autoincrement())
+  name String @db.VarChar(150)
+  Code String @unique @db.VarChar(10)
+  no   Int?
+
+  borrowForms BorrowForm[]
+}
+
+model BorrowFormStatus {
+  id   Int    @id @default(autoincrement())
+  name String @db.VarChar(150)
+  color String? @db.VarChar(20)
+
+  borrowForms BorrowForm[]
+}

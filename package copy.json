@@ -1,0 +1,53 @@
+{
+  "name": "emd-tools3",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@hookform/resolvers": "^5.0.1",
+    "@mantine/charts": "^7.17.2",
+    "@mantine/core": "^7.17.2",
+    "@mantine/dates": "^7.17.2",
+    "@mantine/dropzone": "^7.17.2",
+    "@mantine/hooks": "^7.17.2",
+    "@mantine/modals": "^7.17.2",
+    "@mantine/notifications": "^7.17.2",
+    "@prisma/client": "^6.7.0",
+    "@tabler/icons-react": "^3.31.0",
+    "@yudiel/react-qr-scanner": "^2.3.1",
+    "axios": "^1.8.4",
+    "bcryptjs": "^3.0.2",
+    "datatables.net-dt": "^2.2.2",
+    "datatables.net-react": "^1.0.0",
+    "dayjs": "^1.11.13",
+    "html5-qrcode": "^2.3.8",
+    "next": "15.2.4",
+    "next-auth": "^4.24.11",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-hook-form": "^7.56.2",
+    "recharts": "^2.15.1",
+    "swr": "^2.3.3",
+    "yup": "^1.6.1"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/postcss": "^4.0.16",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "15.2.4",
+    "postcss": "^8.5.3",
+    "postcss-preset-mantine": "^1.17.0",
+    "postcss-simple-vars": "^7.0.1",
+    "prisma": "^6.7.0",
+    "tailwindcss": "^4.0.16",
+    "typescript": "^5"
+  }
+}

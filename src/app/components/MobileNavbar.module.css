@@ -1,0 +1,106 @@
+.control {
+    display: block;
+    padding: var(--mantine-spacing-xs) var(--mantine-spacing-md);
+    border-radius: var(--mantine-radius-md);
+    font-weight: 500;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+
+    text-decoration: none;
+  
+    @mixin hover {
+      background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-6));
+    }
+}
+.control:hover {
+  transform: scale(1.1);
+  /* background-color: light-dark(var(--mantine-color-white-0), var(--mantine-color-dark-6)); */
+}
+   .icon {
+     width: 1.375rem;
+     height: 1.375rem;
+   }
+  
+  .dark {
+    @mixin dark {
+      display: none;
+    }
+  
+    @mixin light {
+      display: block;
+    }
+  }
+  
+  .light {
+    @mixin light {
+      display: none;
+    }
+  
+    @mixin dark {
+      display: block;
+    }
+  }
+
+
+
+  .link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    font-size: var(--mantine-font-size-sm);
+    color: light-dark(var(--mantine-color-gray-7), var(--mantine-color-dark-1));
+    padding: var(--mantine-spacing-xs) var(--mantine-spacing-sm);
+    border-radius: var(--mantine-radius-sm);
+    font-weight: 500;
+  
+    @mixin hover {
+      background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-6));
+      color: light-dark(var(--mantine-color-black), var(--mantine-color-white));
+  
+      .linkIcon {
+        color: light-dark(var(--mantine-color-black), var(--mantine-color-white));
+      }
+    }
+  
+    &[data-active] {
+      &,
+      &:hover {
+        background-color: var(--mantine-color-blue-light);
+        color: var(--mantine-color-blue-light-color);
+  
+        .linkIcon {
+          color: var(--mantine-color-blue-light-color);
+        }
+      }
+    }
+  }
+
+
+
+.maincontent {
+  /* background-color: red ; */
+  border-radius: 24px;
+  margin: 4px;
+  /* padding: 6px; */
+  user-select: none;
+
+  @media only screen and (max-width: 600px){
+    /*Big smartphones [426px -> 600px]*/
+    border-radius: 20px;
+    margin-top: 2px;
+    margin-left: 6px;
+    margin-right: 6px;
+    /* padding: 2px; */
+  }
+
+  @media only screen and (max-width: 321px){
+    /*Small smartphones [325px -> 425px]*/
+    border-radius: 20px;
+    margin-top: 2px;
+    margin-left: 2px;
+    margin-right: 2px;
+    /* padding: 2px; */
+  }
+
+
+}
