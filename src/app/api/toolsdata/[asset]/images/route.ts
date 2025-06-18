@@ -4,10 +4,11 @@ import fs from "fs/promises";
 
 const IMAGE_DIR = path.join(process.cwd(), "public", "tool-images");
 
-export async function GET(request: NextRequest, { params }: { params: { asset: string } }) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ asset: string }> }) {
   try {
     const files = await fs.readdir(IMAGE_DIR);
-    const images = files.filter((name) => name.startsWith(`${params.asset}_`));
+    const { asset } = await params
+    const images = files.filter((name) => name.startsWith(`${asset}_`));
     return new Response(JSON.stringify(images), { status: 200 });
   } catch (error) {
     console.error("Error listing images:", error);
@@ -15,9 +16,10 @@ export async function GET(request: NextRequest, { params }: { params: { asset: s
   }
 }
 
-export async function POST(request: NextRequest, { params }: { params: { asset: string } }) {
+export async function POST(request: NextRequest, { params }: { params: Promise<{ asset: string }> }) {
   try {
     const form = await request.formData();
+    const { asset } = await params
     const file = form.get("file") || form.get("image");
     if (!file || !(file instanceof Blob)) {
       return new Response("No file provided", { status: 400 });
@@ -25,7 +27,7 @@ export async function POST(request: NextRequest, { params }: { params: { asset: 
 
     await fs.mkdir(IMAGE_DIR, { recursive: true });
     const files = await fs.readdir(IMAGE_DIR);
-    const existing = files.filter((name) => name.startsWith(`${params.asset}_`));
+    const existing =  files.filter((name) => name.startsWith(`${asset}_`));
     if (existing.length >= 3) {
       return new Response("Image limit reached", { status: 400 });
     }
@@ -35,7 +37,7 @@ export async function POST(request: NextRequest, { params }: { params: { asset: 
       return new Response("Image limit reached", { status: 400 });
     }
     const ext = (file as File).name.split('.').pop() || "jpg";
-    const filename = `${params.asset}_${String(next).padStart(2, "0")}.${ext}`;
+    const filename = `${asset}_${String(next).padStart(2, "0")}.${ext}`;
     const buffer = Buffer.from(await (file as File).arrayBuffer());
     await fs.writeFile(path.join(IMAGE_DIR, filename), buffer);
     return new Response(JSON.stringify({ filename }), { status: 200 });
