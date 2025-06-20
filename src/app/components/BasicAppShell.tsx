@@ -105,7 +105,7 @@ export function BasicAppShell({ children }: { children: React.ReactNode }) {
             <Link href={"/"}>
               <Image
                 component={NextImage}
-                src="/images/engy-30.png"
+                src={`${process.env.NEXT_PUBLIC_BASE_PATH}/images/engy-30.png`}
                 alt="EGAT"
                 width={120}
                 height={220}
