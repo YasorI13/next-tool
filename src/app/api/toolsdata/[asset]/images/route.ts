@@ -53,7 +53,11 @@ export async function DELETE(request: NextRequest) {
   try {
     const filename = request.nextUrl.searchParams.get("filename");
     if (!filename) return new Response("filename required", { status: 400 });
-    await fs.unlink(path.join(IMAGE_DIR, filename));
+    const filePath = path.join(IMAGE_DIR, filename);
+    if (!path.resolve(filePath).startsWith(IMAGE_DIR)) {
+      return new Response("invalid filename", { status: 400 });
+    }
+    await fs.unlink(filePath);
     return new Response("deleted", { status: 200 });
   } catch (error) {
     console.error("Error deleting image:", error);
