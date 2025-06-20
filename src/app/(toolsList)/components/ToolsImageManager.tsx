@@ -7,6 +7,7 @@ import {
   listToolImages,
   uploadToolImage,
   deleteToolImage,
+  toolImageUrl,
 } from "../services/toolImages";
 import { Box, Fieldset } from "@mantine/core";
 
@@ -41,7 +42,7 @@ export default function ToolsImageManager({ asset }: Props) {
             {images.map((name: string) => (
               <div key={name}>
                 <Image
-                  src={`/tool-images/${name}`}
+                  src={toolImageUrl(asset, name)}
                   alt={name}
                   width={150}
                   height={150}
