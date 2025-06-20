@@ -38,6 +38,10 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     if (!next) {
       return new Response("Image limit reached", { status: 400 });
     }
+    // const ext = (file as File).name.split('.').pop() || "jpg";
+    // const filename = `${asset}_${String(next).padStart(2, "0")}.${ext}`;
+
+
     const filename = `${asset}_${String(next).padStart(2, "0")}.jpg`;
     const buffer = Buffer.from(await (file as File).arrayBuffer());
 
