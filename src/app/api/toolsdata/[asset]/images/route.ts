@@ -2,7 +2,7 @@ import { NextRequest } from "next/server";
 import path from "path";
 import fs from "fs/promises";
 
-const IMAGE_DIR = path.join(process.cwd(), "Upload");
+const IMAGE_DIR = path.join(process.cwd(), "uploads");
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ asset: string }> }) {
   try {
@@ -29,11 +29,11 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     await fs.mkdir(IMAGE_DIR, { recursive: true });
     const files = await fs.readdir(IMAGE_DIR);
     const existing =  files.filter((name) => name.startsWith(`${asset}_`));
-    if (existing.length >= 3) {
+    if (existing.length >= 4) {
       return new Response("Image limit reached", { status: 400 });
     }
     const numbers = existing.map((n) => parseInt(n.split("_")[1]));
-    const next = [1, 2, 3].find((n) => !numbers.includes(n));
+    const next = [1, 2, 3 , 4].find((n) => !numbers.includes(n));
     if (!next) {
       return new Response("Image limit reached", { status: 400 });
     }

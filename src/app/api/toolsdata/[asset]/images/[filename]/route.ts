@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import path from "path";
 import fs from "fs/promises";
 
-const IMAGE_DIR = path.join(process.cwd(), "Upload");
+const IMAGE_DIR = path.join(process.cwd(), "uploads");
 
 const MIME_TYPES: Record<string, string> = {
   jpg: "image/jpeg",
@@ -14,9 +14,9 @@ const MIME_TYPES: Record<string, string> = {
 
 export async function GET(
   _request: NextRequest,
-  { params }: { params: { asset: string; filename: string } }
+  { params }: { params: Promise<{ asset: string; filename: string }> }
 ) {
-  const { filename } = params;
+  const { filename } = await params;
 
   try {
     const filePath = path.join(IMAGE_DIR, filename);
@@ -30,7 +30,7 @@ export async function GET(
     const ext = path.extname(filename).replace(".", "").toLowerCase();
     const type = MIME_TYPES[ext] || "application/octet-stream";
 
-    return new NextResponse(data, {
+    return new NextResponse(Buffer.from(data), {
       status: 200,
       headers: {
         "Content-Type": type,

@@ -51,7 +51,7 @@ export default function ToolsImageManager({ asset }: Props) {
               </div>
             ))}
           </div>
-          {images.length < 3 && (
+          {images.length < 4 && (
             <input
               type="file"
               accept="image/*"
