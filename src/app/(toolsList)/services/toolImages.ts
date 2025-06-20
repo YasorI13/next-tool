@@ -1,5 +1,9 @@
 import { http } from "@/services/http-service";
 
+export function toolImageUrl(asset: string, filename: string) {
+  return `/api/toolsdata/${asset}/images/${filename}`;
+}
+
 export async function listToolImages(asset: string) {
   const res = await http.get(`/toolsdata/${asset}/images`);
   return res.data;
