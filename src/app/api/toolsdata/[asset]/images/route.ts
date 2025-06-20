@@ -2,10 +2,11 @@ import { NextRequest } from "next/server";
 import path from "path";
 import fs from "fs/promises";
 
-const IMAGE_DIR = path.join(process.cwd(), "public", "tool-images");
+const IMAGE_DIR = path.join(process.cwd(), "Upload");
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ asset: string }> }) {
   try {
+    await fs.mkdir(IMAGE_DIR, { recursive: true });
     const files = await fs.readdir(IMAGE_DIR);
     const { asset } = await params
     const images = files.filter((name) => name.startsWith(`${asset}_`));
@@ -39,6 +40,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     const ext = (file as File).name.split('.').pop() || "jpg";
     const filename = `${asset}_${String(next).padStart(2, "0")}.${ext}`;
     const buffer = Buffer.from(await (file as File).arrayBuffer());
+    await fs.mkdir(IMAGE_DIR, { recursive: true });
     await fs.writeFile(path.join(IMAGE_DIR, filename), buffer);
     return new Response(JSON.stringify({ filename }), { status: 200 });
   } catch (error) {
