@@ -17,7 +17,7 @@ export async function middleware(req: NextRequest) {
         // console.log(redirectUrl)
         // const encodedUrl = encodeURIComponent(redirectUrl);
         // console.log(encodedUrl)
-        const response = NextResponse.redirect(new URL('/login', req.url));
+        const response = NextResponse.redirect(new URL(`${process.env.NEXTAUTH_URL}/login`, req.url));
         response.cookies.set('redirectUrl', redirectUrl);
         // return NextResponse.redirect(new URL('/login', req.url))
         return response;

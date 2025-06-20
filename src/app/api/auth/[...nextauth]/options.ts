@@ -13,8 +13,8 @@ export const options: NextAuthOptions = {
         maxAge: 1 * 4 * 60 * 60, // 4 hours
     },
     pages: {
-        signIn: "/login",
-        error: '/login', // Add error page
+        signIn: `${process.env.NEXTAUTH_URL}/login`,
+        error: `${process.env.NEXTAUTH_URL}/login`, // Add error page
     },
     secret: process.env.NEXTAUTH_SECRET, // Make sure this is set in .env
     providers: [
@@ -25,7 +25,6 @@ export const options: NextAuthOptions = {
                 username: { label: "username", type: "text" },
                 password: { label: "password", type: "password" },
                 p_type: { label: "p_type", type: "text" },
-                // checked : { label: "checked", type : "text" }
             },
             async authorize(credentials) {
                 try {
